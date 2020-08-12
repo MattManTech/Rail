@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Rail {
 
-	private String starting;     // úçðú éöéàä
-	private String destination; // úçðä äâòä
-	private String leaving; // ùòú éöéàä
-	private String arrival; // ùòú äâòä
+	private String starting;     // תחנת יציאה
+	private String destination; // תחנה הגעה
+	private String leaving; // שעת יציאה
+	private String arrival; // שעת הגעה
 
 	public Rail(String starting, String destination, String leaving, String arrival) {
 		this.starting = starting;
