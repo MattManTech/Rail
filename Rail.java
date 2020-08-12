@@ -1,15 +1,14 @@
 package rail;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Rail {
 
-	private String starting;     // úçğú éöéàä
-	private String destination; // úçğä äâòä
-	private String leaving; // ùòú éöéàä
-	private String arrival; // ùòú äâòä
+	private String starting;     // ÃºÃ§Ã°Ãº Ã©Ã¶Ã©Ã Ã¤
+	private String destination; // ÃºÃ§Ã°Ã¤ Ã¤Ã¢Ã²Ã¤
+	private String leaving; // Ã¹Ã²Ãº Ã©Ã¶Ã©Ã Ã¤
+	private String arrival; // Ã¹Ã²Ãº Ã¤Ã¢Ã²Ã¤
 
 	public Rail(String starting, String destination, String leaving, String arrival) {
 		this.starting = starting;
@@ -32,7 +31,7 @@ public class Rail {
 		pw.println(arrival);
 	}
 	
-	public void finalSave(PrintWriter pw) { //ùîéøä ñåôéú
+	public void finalSave(PrintWriter pw) { //Ã¹Ã®Ã©Ã¸Ã¤ Ã±Ã¥Ã´Ã©Ãº
 		pw.print(starting + ",");
 		pw.print(leaving + ",");
 		pw.print(destination + ",");
