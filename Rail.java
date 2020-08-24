@@ -10,11 +10,12 @@ public class Rail {
 	private String leaving; // שעת יציאה
 	private String arrival; // שעת הגעה
 
-	public Rail(String starting, String destination, String leaving, String arrival) {
+		public Rail(String starting, String destination, String leaving, String arrival, String[] midStations ) {
 		this.starting = starting;
 		this.destination = destination;
 		this.leaving = leaving;
 		this.arrival = arrival;
+		this.midStations=midStations;
 	}
 
 	public Rail(Scanner s) {
@@ -29,6 +30,9 @@ public class Rail {
 		pw.println(leaving);
 		pw.println(destination);
 		pw.println(arrival);
+		for (int i=0; i<midStations.length; i++) {
+			pw.println(midStations[i]);
+		}
 	}
 	
 	public void finalSave(PrintWriter pw) { //ùîéøä ñåôéú
