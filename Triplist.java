@@ -1,6 +1,5 @@
 package rail;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -10,19 +9,20 @@ public class Triplist {
 
 	private int tripNum;
 	private Rail[] rails;
+	private static int count;
 
-	public Triplist(String name , int tripNum ) throws FileNotFoundException {
+	public Triplist(String name, int tripNum) throws FileNotFoundException {
 		this.tripNum = tripNum;
 		rails = new Rail[tripNum];
 		Scanner s = new Scanner(new File(name));
 
 		for (int i = 0; i < tripNum; i++) {
-			rails[i] = new Rail(s);;
+			rails[i] = new Rail(s);
 		}
 		s.close();
 	}
 
-	public void sort(String name) throws FileNotFoundException { //îéåï
+	public void sort(String name) throws FileNotFoundException { // ×ž×™×•×Ÿ
 		for (int index = 0; index < rails.length - 1; index++) {
 			for (int indexB = 0; indexB < rails.length - index - 1; indexB++) {
 
@@ -33,7 +33,7 @@ public class Triplist {
 					swap(rails, indexB, indexB + 1);
 				} else if (t == r) {
 					int y = Integer.parseInt(rails[indexB].getleaving().substring(3, 5));
-					int i = Integer.parseInt(rails[indexB+1].getleaving().substring(3, 5));
+					int i = Integer.parseInt(rails[indexB + 1].getleaving().substring(3, 5));
 					if (y > i) {
 						swap(rails, indexB, indexB + 1);
 					}
@@ -55,19 +55,30 @@ public class Triplist {
 		}
 		pw.close();
 	}
-	
-	public void finalSave(String name) throws FileNotFoundException { //ùîéøä ñåôéú
+
+	public void finalSave(String name) throws FileNotFoundException { // ×©×ž×™×¨×” ×¡×•×¤×™×ª
 		PrintWriter pw = new PrintWriter(new File(name));
 		for (int i = 0; i < tripNum; i++) {
 			rails[i].finalSave(pw);
 		}
 		pw.close();
 	}
-	
-	public String toString () {
-		StringBuffer sb = new StringBuffer();			
-		for (int i = 0 ; i < tripNum ; i++) {
-			sb.append(i + ")" + rails[i].toString() + "\n");
+
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (int t = 0; t < tripNum; t++) {
+			sb.append((t + 1) + ") " + rails[t].toString() + "\n");
+
+			for (int i = 0; i < rails[count].getMidStations().length; i++) {
+				for (int j = 0; j < rails[count].getMidStations().length; j++) {
+					sb.append(rails[count].getMidStations()[j] + "\n");
+				}
+				sb.append("\n");
+				if ((rails.length - 1) > count) {
+					count++;
+				} else
+					break;
+			}
 		}
 		return sb.toString();
 	}
