@@ -9,7 +9,6 @@ public class Triplist {
 
 	private int tripNum;
 	private Rail[] rails;
-	private static int count;
 
 	public Triplist(String name, int tripNum) throws FileNotFoundException {
 		this.tripNum = tripNum;
@@ -69,16 +68,17 @@ public class Triplist {
 		for (int t = 0; t < tripNum; t++) {
 			sb.append((t + 1) + ") " + rails[t].toString() + "\n");
 
-			for (int i = 0; i < rails[count].getMidStations().length; i++) {
-				for (int j = 0; j < rails[count].getMidStations().length; j++) {
-					sb.append(rails[count].getMidStations()[j] + "\n");
+			for (int i = 0; i < rails[t].getMidStations().length; i++) {
+				for (int j = 0; j < rails[t].getMidStations().length; j++) {
+					sb.append(rails[t].getMidStations()[j] + "\n");
 				}
 				sb.append("\n");
-				if ((rails.length - 1) > count) {
-					count++;
-				} else
+				if (t == tripNum - 1) {
 					break;
+				}
+
 			}
+
 		}
 		return sb.toString();
 	}
