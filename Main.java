@@ -1,6 +1,5 @@
 package rail;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -14,16 +13,16 @@ public class Main {
 		File f = new File("Rail.txt");
 		PrintWriter pw = new PrintWriter(f);
 
-				System.out.println("Welcome to train site!\n");
+		System.out.println("Welcome to train site!\n");
 		String starting, destination, leaving, arrival, midStation, midStationTime;
 		String midStations[] = null;
-		byte choise, counter = 0, numOdMidStations ;
+		byte choise, counter = 0, numOdMidStations;
 		boolean b = true;
 
 		while (b) {
 			System.out.printf(
 					"To schedule trip (number %d) press --> 1\nTo sort all trips by departure time press --> 2\nTo quit press--> 9\n\n",
-					(counter+1));
+					(counter + 1));
 			choise = read.nextByte();
 
 			switch (choise) {
@@ -40,19 +39,19 @@ public class Main {
 				System.out.println("What is the arrival time?");
 				arrival = read.nextLine();
 				System.out.println("How many midStations there is?");
-				numOdMidStations=read.nextByte();
-				midStations= new String[numOdMidStations];
+				numOdMidStations = read.nextByte();
+				midStations = new String[numOdMidStations];
 				read.nextLine();
-				for (int i=0; i<numOdMidStations; i++) {
-					System.out.println("Enter midStation name number " + (i+1) + ":");					
-					midStation=read.nextLine();
+				for (int i = 0; i < numOdMidStations; i++) {
+					System.out.println("Enter midStation name number " + (i + 1) + ":");
+					midStation = read.nextLine();
 					System.out.println("Enter midStation arrival time:");
-					midStationTime=read.nextLine();
-					midStations[i]= "MidStation " + (i+1) + ": " + midStation + " - " + midStationTime + ",";
-					
+					midStationTime = read.nextLine();
+					midStations[i] = "MidStation " + (i + 1) + ": " + midStation + " - " + midStationTime;
+
 				}
-				
-				Rail r = new Rail(starting, destination, leaving, arrival, midStations );
+
+				Rail r = new Rail(starting, destination, leaving, arrival, numOdMidStations, midStations);
 				r.save(pw);
 
 				break;
@@ -60,10 +59,10 @@ public class Main {
 
 			case 2:
 				pw.close();
-				Triplist t = new Triplist("Rail.txt" , counter);
+				Triplist t = new Triplist("Rail.txt", counter);
 				t.sort("Rail.txt");
 				t.finalSave("Rail.txt");
-				System.out.println(t.toString());
+				System.out.println(t.toString() + "\n");
 
 				break;
 
@@ -72,6 +71,7 @@ public class Main {
 				break;
 			}
 		}
-read.close;
+		read.close();
+
 	}
 }
