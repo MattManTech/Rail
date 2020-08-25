@@ -68,6 +68,7 @@ public class Main {
 
 			case 9:
 				b = false;
+			        System.out.println("Good Bye :)");
 				break;
 			}
 		}
