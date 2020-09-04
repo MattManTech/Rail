@@ -69,14 +69,11 @@ public class Triplist {
 			sb.append((t + 1) + ") " + rails[t].toString() + "\n");
 
 			for (int i = 0; i < rails[t].getMidStations().length; i++) {
-				for (int j = 0; j < rails[t].getMidStations().length; j++) {
-					sb.append(rails[t].getMidStations()[j] + "\n");
-				}
-				sb.append("\n");
-				if (t == tripNum - 1) {
-					break;
-				}
-
+				sb.append(rails[t].getMidStations()[i] + "\n");
+			}
+			sb.append("\n");
+			if (t == tripNum - 1) {
+				break;
 			}
 
 		}
