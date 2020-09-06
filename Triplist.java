@@ -10,6 +10,18 @@ public class Triplist {
 	private int tripNum;
 	private Rail[] rails;
 
+	public int getTripNum() {
+		return tripNum;
+	}
+
+	public Rail[] getRails() {
+		return rails;
+	}
+
+	public Triplist() {
+
+	}
+
 	public Triplist(String name, int tripNum) throws FileNotFoundException {
 		this.tripNum = tripNum;
 		rails = new Rail[tripNum];
@@ -25,14 +37,14 @@ public class Triplist {
 		for (int index = 0; index < rails.length - 1; index++) {
 			for (int indexB = 0; indexB < rails.length - index - 1; indexB++) {
 
-				int t = Integer.parseInt(rails[indexB].getleaving().substring(0, 2));
-				int r = Integer.parseInt(rails[indexB + 1].getleaving().substring(0, 2));
+				int t = Integer.parseInt(rails[indexB].getLeaving().substring(0, 2));
+				int r = Integer.parseInt(rails[indexB + 1].getLeaving().substring(0, 2));
 
 				if (t > r) {
 					swap(rails, indexB, indexB + 1);
 				} else if (t == r) {
-					int y = Integer.parseInt(rails[indexB].getleaving().substring(3, 5));
-					int i = Integer.parseInt(rails[indexB + 1].getleaving().substring(3, 5));
+					int y = Integer.parseInt(rails[indexB].getLeaving().substring(3, 5));
+					int i = Integer.parseInt(rails[indexB + 1].getLeaving().substring(3, 5));
 					if (y > i) {
 						swap(rails, indexB, indexB + 1);
 					}
@@ -45,6 +57,15 @@ public class Triplist {
 		Rail temp = array[indexA];
 		array[indexA] = array[indexB];
 		array[indexB] = temp;
+	}
+
+	public boolean timeCheck(String myLeaving, String trainLeaving) {
+		if ((Integer.parseInt(myLeaving.substring(0, 2))) > (Integer.parseInt(trainLeaving.substring(0, 2)))) {
+			return false;
+		} else if ((Integer.parseInt(myLeaving.substring(3, 5))) > (Integer.parseInt(trainLeaving.substring(3, 5)))) {
+			return false;
+		} else
+			return true;
 	}
 
 	public void save(String name) throws FileNotFoundException {
