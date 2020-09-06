@@ -17,9 +17,11 @@ public class Triplist {
 	public Rail[] getRails() {
 		return rails;
 	}
+	
+	
 
 	public Triplist() {
-
+	
 	}
 
 	public Triplist(String name, int tripNum) throws FileNotFoundException {
@@ -59,15 +61,17 @@ public class Triplist {
 		array[indexB] = temp;
 	}
 
-	public boolean timeCheck(String myLeaving, String trainLeaving) {
-		if ((Integer.parseInt(myLeaving.substring(0, 2))) > (Integer.parseInt(trainLeaving.substring(0, 2)))) {
+	
+	public boolean timeCheck (String myLeaving, String trainLeaving) {
+		if ((Integer.parseInt(myLeaving.substring(0, 2)))>(Integer.parseInt(trainLeaving.substring(0, 2)))) {
 			return false;
-		} else if ((Integer.parseInt(myLeaving.substring(3, 5))) > (Integer.parseInt(trainLeaving.substring(3, 5)))) {
+		} else if ((Integer.parseInt(myLeaving.substring(3, 5)))>(Integer.parseInt(trainLeaving.substring(3, 5)))) {
 			return false;
-		} else
-			return true;
+		}
+		else return true;
 	}
-
+	
+	
 	public void save(String name) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(new File(name));
 		for (int i = 0; i < tripNum; i++) {
