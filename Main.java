@@ -21,7 +21,7 @@ public class Main {
 
 		while (b) {
 			System.out.printf(
-					"To schedule trip (number %d) press --> 1\nTo sort all trips by departure time press --> 2\nTo quit press--> 9\n\n",
+					"To schedule trip (number %d) press --> 1\nTo sort all trips by departure time press --> 2\nTo check up to 3 upcoming trips press --> 3\nTo quit press--> 9\n\n",
 					(counter + 1));
 			choise = read.nextByte();
 
@@ -47,7 +47,7 @@ public class Main {
 					midStation = read.nextLine();
 					System.out.println("Enter midStation arrival time:");
 					midStationTime = read.nextLine();
-					midStations[i] = "MidStation " + (i + 1) + ": " + midStation + " - " + midStationTime;
+					midStations[i] = "Midstation " + (i+1) + " " + midStation + " - " + midStationTime;
 
 				}
 
@@ -66,9 +66,56 @@ public class Main {
 
 				break;
 
+			case 3:
+				System.out.println("From where? ");//
+				starting = read.nextLine();
+				System.out.println("Destination?");
+				destination = read.nextLine();
+				System.out.println("What is the departure time?");
+				leaving = read.nextLine();
+				Triplist tr = new Triplist();
+				String[][] schedule = new String[3][2];
+				String temp[][];
+
+				for (int i = 0; i < tr.getRails().length; i++) {
+					if (starting.equals(tr.getRails()[i].getStarting())) {
+						if (tr.timeCheck(leaving, tr.getRails()[i].getLeaving())==true) {
+							schedule[i][0]=tr.getRails()[i].getLeaving();
+						}
+						
+					} else if (starting.equals(tr.getRails()[i].getDestination())) {
+						break;
+					}
+					for (int j = 0; j < tr.getRails()[i].getMidStations().length; j++) {
+						if (starting.equals(tr.getRails()[i].getMidStations()[j].substring(14,tr.getRails()[i].getMidStations()[j].indexOf(" "))) && schedule[i][0]==null) {
+							if (tr.timeCheck(leaving, tr.getRails()[i].getMidStations()[j].substring(tr.getRails()[i].getMidStations()[j].indexOf("-"+2),
+									tr.getRails()[i].getMidStations()[j].length()))==true) {
+							schedule[i][0]=tr.getRails()[i].getMidStations()[j].substring(tr.getRails()[i].getMidStations()[j].indexOf("-"+2),
+									tr.getRails()[i].getMidStations()[j].length());
+							}
+							
+						}
+						if ( destination.equals(tr.getRails()[i].getDestination()) && schedule[i][0]!=null) {
+							temp= new String[tr.getRails().length][tr.getRails()[i].getMidStations().length+2];
+							temp[i][0]=schedule[i][0];
+							for (int k=1; k<temp[i].length-1; k++) {
+								temp[i][k]=tr.getRails()[i].getMidStations()[k];
+							}
+							temp[i][tr.getRails()[i].getMidStations().length-1]=tr.getRails()[i].getArrival();
+							schedule[i]=temp[i];
+						}
+						else if (destination.equals(tr.getRails()[i].getMidStations()[j].substring(14, tr.getRails()[i].getMidStations()[j].indexOf(" ")))) {
+							schedule[i][1]=tr.getRails()[i].getMidStations()[j].substring(tr.getRails()[i].getMidStations()[j].indexOf("-"+2),
+									tr.getRails()[i].getMidStations()[j].length());
+						}
+					}
+				}
+
+				break;
+
 			case 9:
 				b = false;
-			        System.out.println("Good Bye :)");
+				System.out.println("Good Bye :)");
 				break;
 			}
 		}
