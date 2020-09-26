@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Main {
+	public static byte counter;
 	public static void main(String[] args) throws FileNotFoundException {
 
 		Scanner read = new Scanner(System.in);
@@ -14,9 +15,10 @@ public class Main {
 		PrintWriter pw = new PrintWriter(f);
 
 		System.out.println("Welcome to train site!\n");
-		String starting, destination, leaving, arrival, midStation, midStationTime;
-		String midStations[] = null;
-		byte choise, counter = 0, numOdMidStations;
+		String starting, destination, leaving, arrival;
+		String midStationName[] = null;
+		String midStationTime[] = null;
+		byte choise, numOdMidStations;
 		boolean b = true;
 
 		while (b) {
@@ -25,6 +27,8 @@ public class Main {
 					(counter + 1));
 			choise = read.nextByte();
 
+			try {
+			
 			switch (choise) {
 
 			case 1: {
@@ -40,18 +44,18 @@ public class Main {
 				arrival = read.nextLine();
 				System.out.println("How many midStations there is?");
 				numOdMidStations = read.nextByte();
-				midStations = new String[numOdMidStations];
+				midStationName = new String[numOdMidStations];
+				midStationTime = new String[numOdMidStations];
 				read.nextLine();
 				for (int i = 0; i < numOdMidStations; i++) {
 					System.out.println("Enter midStation name number " + (i + 1) + ":");
-					midStation = read.nextLine();
+					midStationName[i] = read.nextLine();
 					System.out.println("Enter midStation arrival time:");
-					midStationTime = read.nextLine();
-					midStations[i] = "Midstation " + (i+1) + " " + midStation + " - " + midStationTime;
-
+					midStationTime[i] = read.nextLine();
+					
 				}
 
-				Rail r = new Rail(starting, destination, leaving, arrival, numOdMidStations, midStations);
+				Rail r = new Rail(starting, destination, leaving, arrival, numOdMidStations, midStationName, midStationTime);
 				r.save(pw);
 
 				break;
@@ -67,49 +71,63 @@ public class Main {
 				break;
 
 			case 3:
-				System.out.println("From where? ");//
+				pw.close();
+				System.out.println("From where? ");
+				read.nextLine();
 				starting = read.nextLine();
 				System.out.println("Destination?");
 				destination = read.nextLine();
 				System.out.println("What is the departure time?");
 				leaving = read.nextLine();
-				Triplist tr = new Triplist();
-				String[][] schedule = new String[3][2];
-				String temp[][];
+				Triplist tk = new Triplist("Rail.txt", counter);
+				String upTo3Leaving[] = new String[3];
+				String upTo3Arrive[] = new String[3];
 
-				for (int i = 0; i < tr.getRails().length; i++) {
-					if (starting.equals(tr.getRails()[i].getStarting())) {
-						if (tr.timeCheck(leaving, tr.getRails()[i].getLeaving())==true) {
-							schedule[i][0]=tr.getRails()[i].getLeaving();
+				for (int i = 0; i < tk.getTripNum(); i++) {
+					if (starting.equals(tk.getRails()[i].getStarting())) {
+						if (tk.timeCheck(leaving, tk.getRails()[i].getLeaving()) == true) {
+							upTo3Leaving[i] = tk.getRails()[i].getLeaving();
 						}
-						
-					} else if (starting.equals(tr.getRails()[i].getDestination())) {
+
+					} else if (starting.equals(tk.getRails()[i].getDestination())) {
 						break;
 					}
-					for (int j = 0; j < tr.getRails()[i].getMidStations().length; j++) {
-						if (starting.equals(tr.getRails()[i].getMidStations()[j].substring(14,tr.getRails()[i].getMidStations()[j].indexOf(" "))) && schedule[i][0]==null) {
-							if (tr.timeCheck(leaving, tr.getRails()[i].getMidStations()[j].substring(tr.getRails()[i].getMidStations()[j].indexOf("-"+2),
-									tr.getRails()[i].getMidStations()[j].length()))==true) {
-							schedule[i][0]=tr.getRails()[i].getMidStations()[j].substring(tr.getRails()[i].getMidStations()[j].indexOf("-"+2),
-									tr.getRails()[i].getMidStations()[j].length());
+
+					for (int j = 0; j < tk.getRails()[i].getMidStationsNum(); j++) {
+						if (starting.equals(tk.getRails()[i].getMidStationsNames()[j])
+								&& upTo3Leaving[i] == null) {
+							if (tk.timeCheck(leaving,
+									tk.getRails()[i].getMidStationsTimes()[j]) == true) {
+								upTo3Leaving[i] = tk.getRails()[i].getMidStationsTimes()[j];
 							}
-							
+
 						}
-						if ( destination.equals(tr.getRails()[i].getDestination()) && schedule[i][0]!=null) {
-							temp= new String[tr.getRails().length][tr.getRails()[i].getMidStations().length+2];
-							temp[i][0]=schedule[i][0];
-							for (int k=1; k<temp[i].length-1; k++) {
-								temp[i][k]=tr.getRails()[i].getMidStations()[k];
-							}
-							temp[i][tr.getRails()[i].getMidStations().length-1]=tr.getRails()[i].getArrival();
-							schedule[i]=temp[i];
+						if (destination.equals(tk.getRails()[i].getDestination()) && upTo3Leaving[i] != null) {
+							upTo3Arrive[i] = tk.getRails()[i].getArrival();
+
 						}
-						else if (destination.equals(tr.getRails()[i].getMidStations()[j].substring(14, tr.getRails()[i].getMidStations()[j].indexOf(" ")))) {
-							schedule[i][1]=tr.getRails()[i].getMidStations()[j].substring(tr.getRails()[i].getMidStations()[j].indexOf("-"+2),
-									tr.getRails()[i].getMidStations()[j].length());
+
+						else if (destination.equals(tk.getRails()[i].getMidStationsNames()[j])
+								&& upTo3Leaving[i] != null) {
+							upTo3Arrive[i] = tk.getRails()[i].getMidStationsTimes()[j];
+
 						}
 					}
 				}
+				int r=0;
+				for (int i=0; i<3; i++) {
+					if (upTo3Leaving[i]!=null && upTo3Arrive[i]!=null) { 
+						r++;
+					}
+				}
+				System.out.println("You have " + r + " next trips on schedule:");
+				for (int i=0; i<3; i++) {
+					if (upTo3Leaving[i]!=null && upTo3Arrive[i]!=null) {
+					System.out.println("Leaving at " + upTo3Leaving[i] + " , arriving at " + upTo3Arrive[i] + "\n");
+				}
+				}
+				
+				
 
 				break;
 
@@ -117,6 +135,10 @@ public class Main {
 				b = false;
 				System.out.println("Good Bye :)");
 				break;
+			}
+			}
+			catch (Exception e) {
+				System.out.println("Not available option-- " + e.getMessage() + ", try again\n");
 			}
 		}
 		read.close();
