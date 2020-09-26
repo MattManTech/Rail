@@ -91,8 +91,8 @@ public class Triplist {
 			sb.append((t + 1) + ") " + rails[t].toString() + "\n");
 
 			for (int i = 0; i < rails[t].getMidStationsNum(); i++) {
-				sb.append(rails[t].getMidStationsNames()[t] + "\n");
-				sb.append(rails[t].getMidStationsTimes()[t] + "\n");
+				sb.append(rails[t].getMidStationsNames()[i] + "\n");
+				sb.append(rails[t].getMidStationsTimes()[i] + "\n");
 			}
 			sb.append("\n");
 			if (t == tripNum - 1) {
