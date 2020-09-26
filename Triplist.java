@@ -1,89 +1,105 @@
 package rail;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class Rail {
+public class Triplist {
 
-	private String starting; // תחנת יציאה
-	private String destination; // תחנה הגעה
-	private String leaving; // שעת יציאה
-	private String arrival; // שעת הגעה
-	private int midStationsNum; // מספר תחנות ביניים
-	private String midStations[]; // תחנות ביניים
+	private int tripNum;
+	private Rail[] rails;
 
-	public Rail(String starting, String destination, String leaving, String arrival, int midStationsNum,
-			String[] midStations) {
-		this.starting = starting;
-		this.destination = destination;
-		this.leaving = leaving;
-		this.arrival = arrival;
-		this.midStationsNum = midStationsNum;
-		this.midStations = midStations;
+	public int getTripNum() {
+		return tripNum;
 	}
 
-	public String getStarting() {
-		return starting;
+	public Rail[] getRails() {
+		return rails;
 	}
 
-	public String getDestination() {
-		return destination;
+	public Triplist() {
+
 	}
 
-
-	public String getArrival() {
-		return arrival;
-	}
-
-	public Rail(Scanner s) {
-		starting = s.nextLine();
-		leaving = s.nextLine();
-		destination = s.nextLine();
-		arrival = s.nextLine();
-		midStations = new String[s.nextInt()];
-		s.nextLine();
-		for (int i = 0; i < midStations.length; i++) {
-			midStations[i] = s.nextLine();
+	public Triplist(String name, int tripNum) throws FileNotFoundException {
+		this.tripNum = tripNum;
+		rails = new Rail[tripNum];
+		Scanner s = new Scanner(new File(name));
+		for (int i = 0; i < tripNum; i++) {
+			rails[i] = new Rail(s);
 		}
-
+		s.close();
 	}
 
-	public int getMidStationsNum() {
-		return midStationsNum;
-	}
+	public void sort(String name) throws FileNotFoundException { // מיון
+		for (int index = 0; index < rails.length - 1; index++) {
+			for (int indexB = 0; indexB < rails.length - index - 1; indexB++) {
 
-	public String[] getMidStations() {
-		return midStations;
-	}
+				int t = Integer.parseInt(rails[indexB].getLeaving().substring(0, 2));
+				int r = Integer.parseInt(rails[indexB + 1].getLeaving().substring(0, 2));
 
-	public void save(PrintWriter pw) {
-		pw.println(starting);
-		pw.println(leaving);
-		pw.println(destination);
-		pw.println(arrival);
-		pw.println(midStationsNum);
-		for (int i = 0; i < midStations.length; i++) {
-			pw.println(midStations[i]);
+				if (t > r) {
+					swap(rails, indexB, indexB + 1);
+				} else if (t == r) {
+					int y = Integer.parseInt(rails[indexB].getLeaving().substring(3, 5));
+					int i = Integer.parseInt(rails[indexB + 1].getLeaving().substring(3, 5));
+					if (y > i) {
+						swap(rails, indexB, indexB + 1);
+					}
+				}
+			}
 		}
 	}
 
-	public void finalSave(PrintWriter pw) { // שמירה סופית
-		pw.print(starting + ",");
-		pw.print(leaving + ",");
-		for (int i = 0; i < midStations.length; i++) {
-			pw.print(midStations[i] + ",");
-		}
-		pw.print(destination + ",");
-		pw.print(arrival);
-		pw.println();
+	private void swap(Rail[] array, int indexA, int indexB) {
+		Rail temp = array[indexA];
+		array[indexA] = array[indexB];
+		array[indexB] = temp;
 	}
 
-	public String getLeaving() {
-		return leaving;
+	public boolean timeCheck(String myLeaving, String trainLeaving) {
+		if ((Integer.parseInt(myLeaving.substring(0, 2))) > (Integer.parseInt(trainLeaving.substring(0, 2)))) {
+			return false;
+		} else if (((Integer.parseInt(myLeaving.substring(0, 2))) == (Integer.parseInt(trainLeaving.substring(0, 2)))) &&
+		((Integer.parseInt(myLeaving.substring(3, 5))) > (Integer.parseInt(trainLeaving.substring(3, 5))))) {
+			return false;
+		} else
+			return true;
+	}
+
+	public void save(String name) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(new File(name));
+		for (int i = 0; i < tripNum; i++) {
+			rails[i].save(pw);
+		}
+		pw.close();
+	}
+
+	public void finalSave(String name) throws FileNotFoundException { // שמירה סופית
+		PrintWriter pw = new PrintWriter(new File(name));
+		pw.println(tripNum);
+		for (int i = 0; i < tripNum; i++) {
+			rails[i].finalSave(pw);
+		}
+		pw.close();
 	}
 
 	public String toString() {
-		return starting + ", " + leaving + ", " + destination + ", " + arrival + ",";
-	}
+		StringBuffer sb = new StringBuffer();
+		for (int t = 0; t < tripNum; t++) {
+			sb.append((t + 1) + ") " + rails[t].toString() + "\n");
 
+			for (int i = 0; i < rails[t].getMidStationsNum(); i++) {
+				sb.append(rails[t].getMidStationsNames()[t] + "\n");
+				sb.append(rails[t].getMidStationsTimes()[t] + "\n");
+			}
+			sb.append("\n");
+			if (t == tripNum - 1) {
+				break;
+			}
+
+		}
+		return sb.toString();
+	}
 }
