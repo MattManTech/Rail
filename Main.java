@@ -24,7 +24,7 @@ public class Main {
 
 		while (b) {
 			System.out.printf(
-					"To schedule trip (number %d) press --> 1\nTo sort all trips by departure time press --> 2\nTo check up to 3 upcoming trips press --> 3\nTo quit press--> 9\n\n",
+					"To schedule trip (number %d) press --> 1\nTo sort all trips by departure time press --> 2\nTo check up to 3 upcoming trips press --> 3\nTo svae all details press --> 4\nTo quit press--> 9\n\n",
 					(counter + 1));
 			choise = read.nextByte();
 
@@ -129,6 +129,12 @@ public class Main {
 					}
 
 					break;
+					
+				case 4: 
+					pw.close();
+					
+					break;
+					
 
 				case 9:
 					b = false;
