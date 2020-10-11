@@ -24,7 +24,7 @@ def rail_schedule():
         time = request.args.get('time')
     else:
         time = "html"
-    return subprocess.check_output(["java", "-classpath", "/home/afeka/tsclient/matan/eclipse-workspace/Rail/src", "railForPycharm/Main",
+    return subprocess.check_output(["java", "-classpath", "/home/afeka/tsclient/matan/eclipse-workspace/Rail/bin", "railForPycharm/Main",
                                     outformat,departure,arrive,time])
 
 
