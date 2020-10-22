@@ -1,31 +1,31 @@
 import subprocess
 
-from flask import Flask, request
+import flask
+from flask import Flask, request, render_template, send_file
 
-app = Flask("my_app1")
+app = Flask(__name__)
 
 
+@app.route("/")
+def main():
+    return render_template('Rail.html')
 
-@app.route("/rail")
-def rail_schedule():
-    if 'outformat' in request.args:
-        outformat = request.args.get('outformat')
-    else:
-        outformat = "html"
-    if 'departure' in request.args:
-        departure = request.args.get('departure')
-    else:
-        departure = "html"
-    if 'arrive' in request.args:
-        arrive = request.args.get('arrive')
-    else:
-        arrive = "html"
-    if 'time' in request.args:
-        time = request.args.get('time')
-    else:
-        time = "html"
-    return subprocess.check_output(["java", "-classpath", "/home/afeka/tsclient/matan/eclipse-workspace/Rail/bin", "railForPycharm/Main",
-                                    outformat,departure,arrive,time])
+@app.route("/image")
+def image():
+    return send_file('train.jpg')
+
+@app.route("/iframe")
+def iframe():
+    return ""
+
+@app.route("/search")
+def search():
+    return subprocess.check_output(["java", "-classpath",
+                                    "/home/matan/eclipse-workspace/Rail/bin", "RailMain",
+                                    request.args.get('outformat'), request.args.get('departure'),
+                                    request.args.get('arrive'), request.args.get('time')])
+                                    
+                                   
 
 
 app.run()
