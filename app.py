@@ -3,27 +3,47 @@ import subprocess
 import flask
 from flask import Flask, request, render_template, send_file
 
-app = Flask(__name__)
-
-
-@app.route("/")
-def main():
-    return render_template('Rail.html')
+app = Flask("Rail")
 
 @app.route("/image")
 def image():
     return send_file('train.jpg')
 
-@app.route("/iframe")
-def iframe():
-    return ""
 
-@app.route("/search")
-def search():
-    return subprocess.check_output(["java", "-classpath",
-                                    "/home/matan/eclipse-workspace/Rail/bin", "RailMain",
-                                    request.args.get('outformat'), request.args.get('departure'),
-                                    request.args.get('arrive'), request.args.get('time')])
+@app.route("/")
+def main():
+     if 'outformat' in request.args:
+        outformat = request.args.get('outformat')
+    else:
+        outformat = "html"
+
+    if 'departure' in request.args :
+        startS = request.args.get('departure')
+    else:
+        startS ='null'
+
+    if 'lastS' in request.args:
+        lastS = request.args.get('arrive')
+    else:
+        lastS = 'null'
+
+    if 'hour' in request.args:
+        hour = request.args.get('hour')
+    else:
+        hour = 'null'
+
+    if 'minutes' in request.args:
+        minutes = request.args.get('minutes')
+    else:
+        minutes = 'null'
+
+
+        
+     return subprocess.check_output(["java", "-classpath",
+                                    "/home/matan/eclipse-workspace/Rail/bin", "RailMain", outformat
+                                   ,departure , arrive , hour, minutes])
+
+        
                                     
                                    
 
